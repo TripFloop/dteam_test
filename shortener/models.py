@@ -2,12 +2,12 @@ from django.contrib.auth.models import User
 from django.db import models, IntegrityError
 from django.db.models import F
 
-from dteam_test.utils import generate_endpoint
+from .utils import generate_endpoint
 
 
 class ShortenLink(models.Model):
     url = models.URLField()
-    shortened_link = models.URLField(blank=True, null=True, unique=True, )
+    shorten_slug = models.SlugField(blank=True, null=True, unique=True, )
     owner_ip = models.GenericIPAddressField()
     shorten_try = models.PositiveIntegerField(blank=True, null=True, default=1)
 
@@ -19,14 +19,10 @@ class ShortenLink(models.Model):
         self.save(update_fields=["shorten_try", ])
 
     def save(self, *args, **kwargs):
-        if not self.shortened_slug:
-            self.shortened_slug = generate_endpoint()
+        if not self.shorten_slug:
+            self.shorten_slug = generate_endpoint()
 
         try:
             super().save(*args, **kwargs)
         except IntegrityError:
             self.save(*args, **kwargs)
-
-
-class SingletonCounter(models.Model):
-    count = models.PositiveIntegerField()

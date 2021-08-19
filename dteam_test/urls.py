@@ -20,6 +20,6 @@ from shortener import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include("dteam_test.urls")),
+    path('api/', include("shortener.urls")),
     path('<str:shorten_slug>/', views.ShortenLinksRedirectView.as_view(),name='redirect-link')
 ]

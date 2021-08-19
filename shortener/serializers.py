@@ -1,13 +1,13 @@
 from rest_framework.serializers import ModelSerializer
 
-from dteam_test.utils import generate_endpoint
+from .utils import generate_endpoint
 from .models import ShortenLink
 
 
 class ShortenLinkSerializer(ModelSerializer):
     class Meta:
         model = ShortenLink
-        fields = ["link", ]
+        fields = ["url"]
 
 
 class ShortenLinkCreateSerializer(ShortenLinkSerializer):
