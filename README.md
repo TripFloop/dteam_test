@@ -31,3 +31,5 @@ sudo docker-compose exec django python manage.py migrate
 ```shell script
 sudo docker-compose exec django python manage.py createsuperuser
 ```
+
+#### Change in admin panel domain for Site model
