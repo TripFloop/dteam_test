@@ -21,5 +21,5 @@ from shortener import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include("dteam_test.urls")),
-    path('shortened_urls_count/', views.)
+    path('<str:shorten_slug>/', views.ShortenLinksRedirectView.as_view(),name='redirect-link')
 ]
