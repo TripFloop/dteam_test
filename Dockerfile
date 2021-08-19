@@ -1,4 +1,4 @@
-FROM nginx/unit:1.23.0-python3.9
+FROM python:3.9.6-slim-bullseye
 
 # set work directory
 WORKDIR /web/app
@@ -14,8 +14,3 @@ RUN pip install --upgrade pip
 COPY requirements.txt /web/app/requirements.txt
 
 RUN pip install -r requirements.txt
-RUN pip install gunicorn
-
-COPY . /web/app
-
-RUN python manage.py collectstatic --noinput --clear

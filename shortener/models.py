@@ -6,15 +6,15 @@ from .utils import generate_endpoint
 
 
 class ShortenLink(models.Model):
-    url = models.URLField()
+    url = models.CharField(max_length=2000, unique=True,)
     shorten_slug = models.SlugField(blank=True, null=True, unique=True, )
     owner_ip = models.GenericIPAddressField()
-    shorten_try = models.PositiveIntegerField(blank=True, null=True, default=1)
+    shorten_try = models.PositiveIntegerField(blank=True, null=True, default=1,)
 
     def __str__(self):
         return self.url
 
-    def get_shorten(self):
+    def get_shorten_count(self):
         self.shorten_try = F("shorten_try") + 1
         self.save(update_fields=["shorten_try", ])
 

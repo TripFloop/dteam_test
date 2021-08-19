@@ -1,3 +1,4 @@
+import re
 from rest_framework.serializers import ModelSerializer
 
 from .utils import generate_endpoint
@@ -11,6 +12,12 @@ class ShortenLinkSerializer(ModelSerializer):
 
 
 class ShortenLinkCreateSerializer(ShortenLinkSerializer):
+
+    def validate(self, data):
+        if not re.search(r'[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\=]*)',
+                         data["url"]):
+            raise serializers.ValidationError("Enter a valid URL")
+        return data
 
     def create(self, validated_data):
         shorten_link_obj = ShortenLink.objects.create(

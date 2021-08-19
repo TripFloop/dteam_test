@@ -24,6 +24,7 @@ class ShortenLinkCreateView(APIView):
                     shorten_link_obj = save_serializer.save(owner_ip=get_client_ip(request))
             else:
                 shorten_link_obj = ShortenLink.objects.filter(url=request.data["url"]).first()
+                shorten_link_obj.get_shorten_count()
             return Response({"shortened_url": build_full_shorten_link(shorten_link_obj.shorten_slug)}, 200)
         return Response(serializer.errors, 400)
 
