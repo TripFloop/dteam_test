@@ -9,23 +9,22 @@ from rest_framework.views import APIView
 
 from .utils import get_client_ip, build_full_shorten_link
 from shortener.models import ShortenLink
-from shortener.serializers import ShortenLinkSerializer, ShortenLinkCreateSerializer
+from shortener.serializers import ShortenLinkSerializer
 
 
 class ShortenLinkCreateView(APIView):
 
     def post(self, request):
         serializer = ShortenLinkSerializer(data=request.data)
-        if serializer.is_valid():
-            shorten_link_obj = None
+        if serializer.is_valid(raise_exception=True):
             if not ShortenLink.objects.filter(url=request.data["url"]):
-                save_serializer = ShortenLinkCreateSerializer(data=request.data)
-                if save_serializer.is_valid():
-                    shorten_link_obj = save_serializer.save(owner_ip=get_client_ip(request))
+                shorten_link_obj = serializer.save(owner_ip=get_client_ip(request))
+                status = 201
             else:
                 shorten_link_obj = ShortenLink.objects.filter(url=request.data["url"]).first()
                 shorten_link_obj.get_shorten_count()
-            return Response({"shortened_url": build_full_shorten_link(shorten_link_obj.shorten_slug)}, 200)
+                status = 200
+            return Response({"shortened_url": build_full_shorten_link(shorten_link_obj.shorten_slug)}, status)
         return Response(serializer.errors, 400)
 
 
@@ -34,7 +33,7 @@ class ShortenLinkListView(APIView):
     def get(self, request):
         queryset = ShortenLink.objects.all().order_by("-shorten_try")[:10]
         serializer = ShortenLinkSerializer(queryset, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, 200)
 
 
 class ShortenLinksRedirectView(View):
@@ -44,11 +43,11 @@ class ShortenLinksRedirectView(View):
         link = ShortenLink.objects.filter(shorten_slug=shorten_slug).first()
         if link:
             return redirect(link.url)
-        return Http404
+        raise Http404
 
 
 class ShortenLinksShortenedCountView(APIView):
 
     def get(self, request):
         count = ShortenLink.objects.all().distinct("owner_ip").count()
-        return Response({"numbers of shortened urls:": count})
+        return Response({"numbers of shortened urls": count})
