@@ -42,7 +42,10 @@ class ShortenLinksRedirectView(View):
         shorten_slug = kwargs.get("shorten_slug")
         link = ShortenLink.objects.filter(shorten_slug=shorten_slug).first()
         if link:
-            return redirect(link.url)
+            redirect_url = link.url
+            if not redirect_url.startswith("http"):
+                redirect_url = "https://" + redirect_url
+            return redirect(redirect_url)
         raise Http404
 
 

@@ -13,7 +13,7 @@ class ShortenLinkSerializer(ModelSerializer):
         fields = ["url"]
 
     def validate(self, data):
-        if not re.search(r'[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\=]*)',
+        if not re.search(r'^(https?:\/\/)?([\w\.]+)\.([a-z]{2,6}\.?)(\/[\w\.]*)*\/?$',
                          data["url"]):
             raise ValidationError("Enter a valid URL")
         return data

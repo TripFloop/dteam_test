@@ -6,7 +6,7 @@ from .utils import generate_endpoint
 
 
 class ShortenLink(models.Model):
-    url = models.CharField(max_length=2000, unique=True,)
+    url = models.CharField(max_length=2000)
     shorten_slug = models.SlugField(blank=True, null=True, unique=True, )
     owner_ip = models.GenericIPAddressField()
     shorten_try = models.PositiveIntegerField(blank=True, null=True, default=1,)

@@ -35,6 +35,7 @@ class ShortenLinkCreateAndRedirectTestCase(APITestCase):
     def test_create_existing_link(self):
         response = self.client.post(reverse("shortener:create_link"), data=self.test_data, format="json")
         self.assertEqual(response.status_code, 201)
+        first_shortened_link = response.data["shortened_url"]
         self.assertEqual(
             self.client.get(
                 reverse("redirect-link",
@@ -43,7 +44,8 @@ class ShortenLinkCreateAndRedirectTestCase(APITestCase):
             ).headers["location"], "https://google.com"
         )
         response = self.client.post(reverse("shortener:create_link"), data=self.test_data, format="json")
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["shortened_url"], first_shortened_link)
 
     def test_redirect_non_exist(self):
         response = self.usual_client.get(reverse("redirect-link", args=("non_exist",)))
