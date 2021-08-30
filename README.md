@@ -34,6 +34,6 @@ sudo docker-compose exec django python manage.py createsuperuser
 
 #### Change in admin panel domain for Site model
 
-
+<br/>
 
 Made with this requirements https://github.com/odwyersoftware/python-tech-test
