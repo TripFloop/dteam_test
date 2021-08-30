@@ -1,6 +1,6 @@
-<h2 align="center">
+<h1 align="center">
 	Dteam test
-</h2>
+</h1>
 
 [Dteam site](https://dteam.dev/)
 
